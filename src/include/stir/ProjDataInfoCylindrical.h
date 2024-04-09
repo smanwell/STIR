@@ -253,6 +253,20 @@ public:
   */
   void get_ring_pair_for_segment_axial_pos_num(int& ring1, int& ring2, const int segment_num, const int axial_pos_num) const;
 
+  //! Determine whether or not the projection sampling is limited to physical rings.
+  /*! Implemented by SM 2024-04-04 to determine the number of axial slices
+  *   to initialize in the reconstructed image for SPECT reconstruction.
+  *   The original behaviour (as determined by find_sampling_and_z_size(), 
+  *   see VoxelsOnCartesianGrid.cxx) assumed that virtual slices should occur
+  *   the axial bins of SPECT projection data, which would lead to an error being thrown
+  *   as SPECTUB expects the number of image slices t match the number of axial positions
+  *   in the projection data.
+  *   The variable returned by this function seemed to be true for SPECT projection data, 
+  *   so I assumed it was appropriate for this use case. This may not be true.
+  *   TODO Clarify this usage with D. Deidda.
+  */
+  inline bool get_sampling_corresponds_to_physical_rings() const;
+
   std::string parameter_info() const override;
 
 protected:
