@@ -267,10 +267,4 @@ ProjDataInfoCylindrical::get_num_ring_pairs_for_segment_axial_pos_num(const int 
   return static_cast<unsigned>(this->get_all_ring_pairs_for_segment_axial_pos_num(segment_num, axial_pos_num).size());
 }
 
-bool 
-ProjDataInfoCylindrical::get_sampling_corresponds_to_physical_rings() const
-{
-  return sampling_corresponds_to_physical_rings;
-}
-
 END_NAMESPACE_STIR

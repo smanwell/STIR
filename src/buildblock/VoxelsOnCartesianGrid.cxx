@@ -62,13 +62,8 @@ find_sampling_and_z_size(float& z_sampling, float& s_sampling, int& z_size, cons
 
     {
       // the case of cylindrical data
-      // Check if we're limiting the slice plane to physical rings or not.
-      // SM 2024-04-04
-      const bool sampling_corresponds_to_physical_rings = proj_data_info_cyl_ptr->get_sampling_corresponds_to_physical_rings();
-      z_sampling = (sampling_corresponds_to_physical_rings) ? proj_data_info_cyl_ptr->get_ring_spacing()
-                                                            : proj_data_info_cyl_ptr->get_ring_spacing() / 2;
 
-      float tmpZSampling = proj_data_info_ptr->get_sampling_in_t(Bin(0, 0, 1, 0));
+      z_sampling = proj_data_info_cyl_ptr->get_ring_spacing() / 2;
 
       // for 'span>1' case, we take z_size = number of sinograms in segment 0
       // for 'span==1' case, we take 2*num_rings-1
@@ -78,19 +73,9 @@ find_sampling_and_z_size(float& z_sampling, float& s_sampling, int& z_size, cons
       assert(proj_data_info_cyl_ptr->get_max_segment_num() >= 0);
 
       if (z_size < 0)
-        {
-          if (sampling_corresponds_to_physical_rings)
-            {
-              z_size = proj_data_info_cyl_ptr->get_num_axial_poss(0);
-            }
-          else
-            {
-              z_size = proj_data_info_cyl_ptr->get_max_ring_difference(0) > 
-                       proj_data_info_cyl_ptr->get_min_ring_difference(0) ? 
-                       proj_data_info_cyl_ptr->get_num_axial_poss(0) :
-                       2 * proj_data_info_cyl_ptr->get_num_axial_poss(0) - 1;
-            }
-        }
+        z_size = proj_data_info_cyl_ptr->get_max_ring_difference(0) > proj_data_info_cyl_ptr->get_min_ring_difference(0)
+                     ? proj_data_info_cyl_ptr->get_num_axial_poss(0)
+                     : 2 * proj_data_info_cyl_ptr->get_num_axial_poss(0) - 1;
     }
   else if (const ProjDataInfoBlocksOnCylindrical* proj_data_info_blk_ptr
            = dynamic_cast<const ProjDataInfoBlocksOnCylindrical*>(proj_data_info_ptr))
